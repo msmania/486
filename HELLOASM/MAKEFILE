@@ -1,0 +1,37 @@
+PROJ = TEST
+USEMFC = 0
+CC = cl
+ML = ml
+CFLAGS =/nologo /W3 /O
+LFLAGS =/NOLOGO /ONERROR:NOEXE
+AFLAGS =
+LIBS =
+MAPFILE =nul
+DEFFILE =nul
+
+all: $(PROJ).EXE
+
+clean:
+    @del *.obj
+    @del *.exe
+    @del *.bnd
+    @del *.pdb
+
+UTILS.OBJ: UTILS.ASM
+    $(ML) $(AFLAGS) /c UTILS.ASM $@
+
+MAIN.OBJ: MAIN.C
+    $(CC) $(CFLAGS) /c MAIN.C $@
+
+$(PROJ).EXE:: MAIN.OBJ UTILS.OBJ
+    echo >NUL @<<$(PROJ).CRF
+MAIN.OBJ +
+UTILS.OBJ
+$(PROJ).EXE
+$(MAPFILE)
+$(LIBS)
+$(DEFFILE)
+;
+<<
+    link $(LFLAGS) @$(PROJ).CRF
+    @copy $(PROJ).CRF $(PROJ).BND
